@@ -23,20 +23,31 @@ choose a color from hsv values, used for a rgb ledstrip
 uses the basis of html5 canvas timepicker
 */
 //draw function to do all the drawing.
+//色调H,用角度度量，取值范围为0°～360°，从红色开始按逆时针方向计算，红色为0°，绿色为120°,蓝色为240°。它们的补色是：黄色为60°，青色为180°,品红为300°；
+//饱和度S,取值范围为0.0～1.0，值越大，颜色越饱和。
+//亮度V,取值范围为0(黑色)～255(白色)。
 colorPicker.prototype.draw = function(drawHandles) {
 	if (this.changed) {
 		this.ctx.save();
 		//clear canvas first
+		//clearRect(x, y, width, height)删除一个画布的矩形区域
+		//xy，左上角的坐标，wid，hei矩形的尺寸
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		//square as background
+		//		beginPath() 丢弃任何当前定义的路径并且开始一条新的路径。它把当前的点设置为 (0,0)
 		this.ctx.beginPath();
+		//		rect() 方法为当前路径添加一条矩形子路径
 		this.ctx.rect(0, 0, 2 * this.centerX, 2 * this.centerY);
+		//		closePath() 方法关闭一条打开的子路径
 		this.ctx.closePath();
-		this.ctx.fillStyle = this.bgcolor;
+//		console.info(this.bgcolor);
+		//		this.ctx.fillStyle = this.bgcolor;
 		//background color
+		//		fill() 方法使用 fillStyle 属性所指定的颜色、渐变和模式来填充当前路径
 		this.ctx.fill();
 
 		//draw around center
+//		translate() 方法为画布的变换矩阵添加水平的和垂直的偏移。参数 dx 和 dy 添加给后续定义路径中的所有点
 		this.ctx.translate(this.centerX, this.centerY);
 
 		//background for value ring
@@ -49,8 +60,15 @@ colorPicker.prototype.draw = function(drawHandles) {
 
 		//draw outer circle for value ring
 		this.ctx.beginPath();
+//		strokeStyle 属性设置或返回用于笔触的颜色、渐变或模式
 		this.ctx.strokeStyle = hsl;
-		//		console.info(this.scale * 4 + this.scale / 2);
+		//arc(x, y, radius, startAngle, endAngle, counterclockwise)
+		//x, y	描述弧的圆形的圆心的坐标。
+		//radius	描述弧的圆形的半径。
+		//startAngle 沿着圆指定弧的开始点和结束点的一个角度。这个角度用弧度来衡量。
+		//endAngle 沿着 X 轴正半轴的三点钟方向的角度为 0，角度沿着逆时针方向而增加。
+		//counterclockwise	弧沿着圆周的逆时针方向（TRUE）还是顺时针方向（FALSE）遍历。
+//		console.info("arc = "+this.scale * 4 + this.scale / 2);
 		this.ctx.arc(0, 0, this.scale * 4 + this.scale / 2, 0, 2 * Math.PI, false);
 		this.ctx.stroke();
 		this.ctx.closePath();
@@ -63,29 +81,36 @@ colorPicker.prototype.draw = function(drawHandles) {
 		hsl = 'hsl(' + hsl.h + ',' + hsl.s + '%,' + hsl.l + '%)';
 
 		//draw inside, chosen color
-		//		this.ctx.beginPath();
-		//		this.ctx.arc(0, 0, this.scale * 1, 0, 2 * Math.PI, false);
-		//		this.ctx.closePath();
-		//		this.ctx.fillStyle = hsl;
-		//		this.ctx.fill();
+		this.ctx.beginPath();
+		this.ctx.arc(0, 0, 0, 0, 2 * Math.PI, false);
+		//				this.ctx.arc(0, 0, this.scale * 1, 0, 2 * Math.PI, false);
+		this.ctx.closePath();
+		this.ctx.fillStyle = hsl;
+		this.ctx.fill();
 
 		//draw the handles
 		this.ctx.save();
 		//color handle
+//		console.info(this.h);
 		this.ctx.rotate(this.h);
-		//		console.info("translate = " + this.scale+ this.s * this.scale * 3.3);
+//		console.info("scale = "+this.scale);
+//		console.info("s = "+this.s);
+//		console.info("translate3 = "+(this.s * this.scale * 3));
+//		console.info("translate4.5 = "+this.scale * 4.5);
+//		translate(dx, dy) 方法转换画布的用户坐标系统，转换的量的 X 和 Y 大小
 		this.ctx.translate(this.s * this.scale * 4.5, 0);
-		//		this.ctx.translate(this.scale + this.s * this.scale * 3.4, 0);
+		//		this.ctx.translate(3, 0);
 		//go to handle location
-		//		this.ctx.translate(this.scale+this.s*this.scale*3,0); //go to handle location
 		this.drawHandle('c');
 		//set canvas origin
 		this.ctx.restore();
 		//restore the canvas so that origin is in center of image
 		//value handle
-		//		this.ctx.rotate(this.v*2*Math.PI);
-		//		this.ctx.translate(this.scale*4.5,0); //go to handle location
-		//		this.drawHandle('v');
+		//		this.ctx.rotate(this.v * 2 * Math.PI);
+		//		this.ctx.translate(this.scale * 4.5, 0);
+		//		this.ctx.translate(0, 0);
+		//go to handle location
+//				this.drawHandle('v');
 		this.ctx.restore();
 	}
 	this.changed = false;
@@ -189,7 +214,6 @@ colorPicker.prototype.getColorHSL = function() {
 }
 //set the colorPicker to a given color in hsv values
 colorPicker.prototype.setColorHSV = function(h, s, v) {
-	console.info("setColorHSV");
 	this.h = h <= 1 ? h * (2 * Math.PI) : 0;
 	this.s = (s <= 1 ? s : 0);
 	this.v = (v <= 1 ? v : 0);
@@ -213,7 +237,7 @@ colorPicker.prototype.stopDraw = function() {
 }
 //function object for each canvas, for each colorPicker
 //contains all variables for a colorPicker like scale and color.
-function colorPicker(canvas, opts, callback) {
+function colorPicker(canvas, opts) {
 	//init
 	this.canvas = canvas;
 	this.ctx = canvas.getContext('2d');
@@ -221,7 +245,7 @@ function colorPicker(canvas, opts, callback) {
 	var colorPicker = this;
 	//image for the gradient in the center
 	this.clrImg = new Image();
-	this.clrImg.src = opts.image || '../image/RGB_color_whitebg.png';
+	this.clrImg.src = opts.image || '../image/RGB_color.png';
 	//store (this) class in variable, so events can use (this) as well
 	//default values, all zero
 	this.h = 0;
@@ -266,33 +290,28 @@ function colorPicker(canvas, opts, callback) {
 				var mx = mouse.x - colorPicker.centerX;
 				var my = mouse.y - colorPicker.centerY;
 				var len = Math.pow(mx, 2) + Math.pow(my, 2);
-
-				//				这里的if是为了判断操作环的位置是否在图像区域内
-
-				//				if (len <= colorPicker.scale * colorPicker.scale * 25) {//inside all 5 rings
-				//					if (len > colorPicker.scale * colorPicker.scale) {//outside inner color place
-				var angle = Math.atan2(my, mx);
-				angle += (my) < 0 ? 2 * Math.PI : 0;
-				//						if (len <= colorPicker.scale * colorPicker.scale * 18) {//inside color area
-				colorPicker.h = angle;
-				var s = (Math.sqrt(len) - colorPicker.scale) / 3 / colorPicker.scale;
-				s = s > 1 ? 1 : s;
-				colorPicker.s = s < 0 ? 0 : s;
-				colorPicker.selected = 'c';
-				if (colorPicker.onColorChange) {
-					colorPicker.onColorChange();
-				} //function executed when the handles are changed
-				//						} else {//inside value ring
-				//						这里通过外环调节l的值
-				//						console.info("v");
-				//							colorPicker.v = (angle / (2 * Math.PI)) % 1;
-				//							colorPicker.selected = 'v';
-				//							if (colorPicker.onColorChange) {
-				//								colorPicker.onColorChange();
-				//							} //function executed when the handles are changed
-				//						}
-				//					}
-				//				}
+				if (len <= colorPicker.scale * colorPicker.scale * 25) {//inside all 5 rings
+					if (len > colorPicker.scale * colorPicker.scale) {//outside inner color place
+						var angle = Math.atan2(my, mx);
+						angle += (my) < 0 ? 2 * Math.PI : 0;
+						if (len <= colorPicker.scale * colorPicker.scale * 16) {//inside color area
+							colorPicker.h = angle;
+							var s = (Math.sqrt(len) - colorPicker.scale) / 3 / colorPicker.scale;
+							s = s > 1 ? 1 : s;
+							colorPicker.s = s < 0 ? 0 : s;
+							colorPicker.selected = 'c';
+							if (colorPicker.onColorChange) {
+								colorPicker.onColorChange();
+							} //function executed when the handles are changed
+						} else {//inside value ring
+							colorPicker.v = (angle / (2 * Math.PI)) % 1;
+							colorPicker.selected = 'v';
+							if (colorPicker.onColorChange) {
+								colorPicker.onColorChange();
+							} //function executed when the handles are changed
+						}
+					}
+				}
 			}
 			colorPicker.changed = true;
 			//redraw to show selected handle on click, not only on draw
@@ -318,32 +337,16 @@ function colorPicker(canvas, opts, callback) {
 				s = s > 1 ? 1 : s;
 				s = s < 0 ? 0 : s;
 				colorPicker.s = s;
+			} else if (colorPicker.selected == 'v') {
+				colorPicker.v = (angle / (2 * Math.PI)) % 1;
 			}
-			//			通过外环调节颜色l值
-			//			else if (colorPicker.selected == 'v') {
-			//				colorPicker.v = (angle / (2 * Math.PI)) % 1;
-			//			}
 			//the canvas changed, if this is true, it will be redrawn
 			colorPicker.changed = true;
 		}
 	});
 	//stop the selection when the mouse is released.
 	//bind this one to window to also stop the selection if mouse is released outside the canvas area.
-	//	window.addEventListener('touchend', function(e) {
-	//		if (colorPicker.selected && document.body.contains(colorPicker.canvas)) {
-	//			//colorPicker.animate(colorPicker.selected,true); //animate handlers to position
-	//			colorPicker.selected = false;
-	//			// which handle is moving is now stored, so handle can be deselected
-	//			colorPicker.changed = true;
-	//		}
-	//		if (colorPicker.onCenterClick && document.body.contains(colorPicker.canvas)) {
-	//			var mouse = colorPicker.getMousePos(e);
-	//			if ((Math.pow(colorPicker.centerX - mouse.x, 2) + Math.pow(colorPicker.centerY - mouse.y, 2)) < colorPicker.scale * colorPicker.scale) {
-	//				colorPicker.onCenterClick();
-	//			}
-	//		}
-	//	});
-	canvas.addEventListener('touchend', function(e) {
+	window.addEventListener('touchend', function(e) {
 		if (colorPicker.selected && document.body.contains(colorPicker.canvas)) {
 			//colorPicker.animate(colorPicker.selected,true); //animate handlers to position
 			colorPicker.selected = false;
@@ -356,10 +359,11 @@ function colorPicker(canvas, opts, callback) {
 				colorPicker.onCenterClick();
 			}
 		}
-		callback(colorPicker.getColorHSV());
+		console.info(colorPicker.getColorHSV());
+		console.info(colorPicker.getColorHSV().h *255);
 	});
 }
 
-//document.body.addEventListener('touchend', function(event) {
-//	event.preventDefault();
-//}, false);
+document.body.addEventListener('touchmove', function(event) {
+	event.preventDefault();
+}, false);
