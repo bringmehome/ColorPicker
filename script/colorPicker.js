@@ -74,7 +74,9 @@ colorPicker.prototype.draw = function(drawHandles) {
 		//color handle
 		this.ctx.rotate(this.h);
 		//		console.info("translate = " + this.scale+ this.s * this.scale * 3.3);
+//		这样可以点击中间
 		this.ctx.translate(this.s * this.scale * 4.5, 0);
+//		这样中间就有一个环
 		//		this.ctx.translate(this.scale + this.s * this.scale * 3.4, 0);
 		//go to handle location
 		//		this.ctx.translate(this.scale+this.s*this.scale*3,0); //go to handle location
@@ -213,6 +215,7 @@ colorPicker.prototype.stopDraw = function() {
 }
 //function object for each canvas, for each colorPicker
 //contains all variables for a colorPicker like scale and color.
+//加上callback用于回调前端
 function colorPicker(canvas, opts, callback) {
 	//init
 	this.canvas = canvas;
