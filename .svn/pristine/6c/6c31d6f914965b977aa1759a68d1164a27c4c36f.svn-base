@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width" />
+    <title>APP</title>
+</head>
+
+<body>
+    <!--RGB控制-->
+    <div align="center">
+        <canvas id="colorPicker1" width="250" height="250"></canvas>
+    </div>
+</body>
+<!--以下是画圆圈的-->
+<script type="text/javascript" src="./script/colorPicker.js"></script>
+<script>
+//是否开灯
+// var width = 0.4 * document.body.clientHeight;
+// var switchbttop = width / 2 - 40.5;
+var width = 250;
+//上次的color指数
+var colorPicker = new colorPicker(document.getElementById('colorPicker1'), {
+    h: 0.5,
+    s: 5,
+    v: 0,
+    bgcolor: '#f0f0f0'
+});
+//		//设置控制手环的初始位置
+colorPicker.setColorHSV(1, 5, 0);
+self.setInterval("sendrgbcode()", 2 * 1000);
+
+function sendrgbcode() {
+    var color = colorPicker.getColorHSV();
+    var colorcode = parseInt(color.h * 360);
+    console.log(color);
+}
+</script>
+
+</html>

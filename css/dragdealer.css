@@ -1,0 +1,55 @@
+/**
+ * Dragdealer.js 0.9.7
+ * http://github.com/skidding/dragdealer
+ *
+ * (c) 2010+ Ovidiu Cherecheș
+ * http://skidding.mit-license.org
+ */
+
+.dragdealer {
+	position: relative;
+	/*height: 20px;*/
+	height: 28px;
+	/*background: #E9E9E9;*/
+	margin: 0px 45px 0px 45px;
+	/*border: 1px solid #CDCDCD;*/
+	background: -webkit-linear-gradient(left, #626768,#a8b3b2);
+	border-radius: 20px;
+/*	border-radius: 10px;*/
+	/*background-image: url(../image/RGB_color_slider435-50.png);*/
+}
+#satslider{
+	/*background-image: url(../image/saturability.png);*/
+	background: -webkit-linear-gradient(left, #69e49a,#23c3c3);
+}
+.dragdealer .handle {
+	position: absolute;
+	/*top: 0;*/
+	/*left: 0;*/
+	cursor: pointer;
+}
+.dragdealer .red-bar {
+	width: 25px;
+	height: 25px;
+	/*margin-top: 4px;*/
+	/*margin-left: 1px;*/
+	/*background-image: url(../image/smallicon-huadonganniu.png);*/
+	background: #F6F6F6;
+	border-radius:45px;
+	border: 1px solid #FFFFFF;
+	color: #FFF;
+	font-size: 14px;
+	line-height: 30px;
+	text-align: center;
+}
+.dragdealer .red-bar span {
+	color: #F0F0F0;
+	/*color: #585757;*/
+}
+.dragdealer .red-bar img {
+	height: 20px;
+	width: 20px
+}
+.dragdealer .disabled {
+	background: #898989;
+}

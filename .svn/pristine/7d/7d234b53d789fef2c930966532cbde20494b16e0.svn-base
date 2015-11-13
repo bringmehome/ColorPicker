@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>APP</title>
+		<link rel="stylesheet" type="text/css" href="../css/api.css" />
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		<style>
+			#con {
+				margin: 10px;
+				font-size: 28px;
+			}
+			ul {
+				margin-bottom: 10px;
+			}
+			.txt {
+				margin: 5px 10px;
+				padding: 5px;
+				color: #000;
+				word-wrap: break-word;
+			}
+		</style>
+	</head>
+	<body></body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript">
+		apiready = function() {
+			var chromeDebug = api.require('chromeDebug');
+			chromeDebug.openDebug(function(ret, err) {
+				if (212 == ret.code) {
+					alert(JSON.stringify(ret));
+				} else {
+					console.log(ret);
+				}
+			});
+		};
+	</script>
+</html>
